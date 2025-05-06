@@ -2,13 +2,9 @@ version: '3.8'
 
 services:
   nuxt-vps-demo:
-    build:
-      context: .
-      dockerfile: Dockerfile
     image: lokyiec/nuxt-vps-demo:latest
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
+    env_file:
+      - .env
     networks:
       - traefik-network
     labels:
@@ -19,6 +15,9 @@ services:
       - "traefik.http.routers.vps-demo.tls.certresolver=letsencrypt"
       - "traefik.http.services.vps-demo.loadbalancer.server.port=3000"
       - "traefik.docker.network=traefik-network"
+    deploy:
+      restart_policy:
+        condition: any
 
 networks:
   traefik-network:
